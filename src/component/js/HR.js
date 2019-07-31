@@ -165,7 +165,7 @@ class HrTabs extends React.Component {
         </Tabs>
         <Modal
           show={this.state.setShow}
-          size="lg"
+          size="md"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className="modal"
@@ -187,44 +187,68 @@ class HrTabs extends React.Component {
           <Modal.Body className="modal-body">
             <Form className="form-body">
               <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="6">
-                  Position
-                </Form.Label>
-                <Form.Label column sm="10">
-                  {this.state.ref_person.POSITION}
-                </Form.Label>
+                <Container>
+                  <Row>
+                    <Col>
+                      <Form.Label>Position</Form.Label>
+                    </Col>
+                    <Col>
+                      <Form.Label>{this.state.ref_person.POSITION}</Form.Label>
+                    </Col>
+                  </Row>
+                </Container>
               </Form.Group>
               <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                  Contact
-                </Form.Label>
-                <Form.Label column sm="2">
-                  {this.state.ref_person.REF_CONTACT}
-                </Form.Label>
+                <Container>
+                  <Row>
+                    <Col>
+                      <Form.Label>Contact</Form.Label>
+                    </Col>
+                    <Col>
+                      <Form.Label>
+                        {this.state.ref_person.REF_CONTACT}
+                      </Form.Label>
+                    </Col>
+                  </Row>
+                </Container>
               </Form.Group>
               <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                  Address
-                </Form.Label>
-                <Form.Label column sm="2">
-                  {this.state.ref_person.REF_ADDRESS}
-                </Form.Label>
+                <Container>
+                  <Row>
+                    <Col>
+                      <Form.Label>Address</Form.Label>
+                    </Col>
+                    <Col>
+                      <Form.Label>
+                        {this.state.ref_person.REF_ADDRESS}
+                      </Form.Label>
+                    </Col>
+                  </Row>
+                </Container>
               </Form.Group>
               <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                  Referred by
-                </Form.Label>
-                <Form.Label column sm="2">
-                  {this.state.ref_person.EMP_NAME}
-                </Form.Label>
+                <Container>
+                  <Row>
+                    <Col>
+                      <Form.Label>Referred by</Form.Label>
+                    </Col>
+                    <Col>
+                      <Form.Label>{this.state.ref_person.EMP_NAME}</Form.Label>
+                    </Col>
+                  </Row>
+                </Container>
               </Form.Group>
               <Form.Group as={Row} controlId="formPlaintextEmail">
-                <Form.Label column sm="2">
-                  Status
-                </Form.Label>
-                <Form.Label column sm="2">
-                  {this.state.ref_person.EMP_NAME}
-                </Form.Label>
+                <Container>
+                  <Row>
+                    <Col>
+                      <Form.Label>Status</Form.Label>
+                    </Col>
+                    <Col>
+                      <Form.Label>{this.state.ref_person.STATUS}</Form.Label>
+                    </Col>
+                  </Row>
+                </Container>
               </Form.Group>
             </Form>
           </Modal.Body>
