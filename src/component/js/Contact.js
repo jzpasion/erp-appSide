@@ -1,7 +1,8 @@
 import React from "react";
 import { Alert, Container, Row, Col } from "react-bootstrap";
-import logo from "../2.png";
 import lago from "../1.png";
+import contact from "../contact.png";
+
 export default class Contact extends React.Component {
   render() {
     return (
@@ -35,7 +36,7 @@ export default class Contact extends React.Component {
               </Col>
 
               <Col sm={4}>
-                <img src={lago} alt="Logo" />
+                <img src={contact} alt="Logo" />
               </Col>
             </Row>
           </Container>
@@ -54,7 +55,7 @@ export default class Contact extends React.Component {
                 color: "white"
               }}
             >
-              <p>Contact Us:</p>
+              <p>Contact Us</p>
               <br />
               <p>
                 {" "}

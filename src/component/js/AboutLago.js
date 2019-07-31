@@ -48,7 +48,8 @@ export default class AboutLago extends React.Component {
                     Our strength is in knowledge, innovation, customized
                     solutions and out-of-the-box thinking. This resulted in many
                     great dark rides, outdoor rides, upgrades, museum
-                    experiences, AV and lighting projects and much more!
+                    experiences, AV and lighting projects and much more! IMAGE
+                    CREATE INSPIRE
                   </p>
                 </Alert>
               </Col>

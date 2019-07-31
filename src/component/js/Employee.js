@@ -12,7 +12,7 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/employee.css";
 import logo from "../2.png";
-import HR from "../hri.png";
+import HR from "../hr.png";
 import ACC from "../acc.png";
 import CODE from "../code.png";
 import Swal from "sweetalert2";
@@ -117,8 +117,9 @@ export default class Employee extends React.Component {
 
       Swal.fire({
         type: "success",
-        title: "Add Success!",
-        text: "Thank you!"
+        title: "Thank you!",
+        text:
+          "The Human Resources Department will contact the referred applicant"
       });
 
       this.setState({
@@ -132,7 +133,7 @@ export default class Employee extends React.Component {
     } else {
       Swal.fire({
         type: "error",
-        title: "Oops..(✖﹏✖)",
+        title: "Attention!",
         text: "Please fill all required fields!"
       });
     }
@@ -191,11 +192,11 @@ export default class Employee extends React.Component {
                 <Card.Body>
                   <Card.Title>HR Assistant</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    Lorem Ipsum
+                    Skill Set
                   </Card.Subtitle>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                    2 to 3 years HR assistant must have a experience of liaison
+                    Papers for government and basic skills for admin task.
                   </Card.Text>
 
                   <button
@@ -226,11 +227,11 @@ export default class Employee extends React.Component {
                 <Card.Body>
                   <Card.Title>Acounting</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    Lorem Ipsum
+                    Skill Set
                   </Card.Subtitle>
                   <Card.Text>
-                    Some quick example text to build on the card title and make
-                    up the bulk of the card's content.
+                    2 to 3 years of experience in Accounting and Payroll and
+                    must be a College graduate.
                   </Card.Text>
 
                   <button
