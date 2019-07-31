@@ -1,0 +1,27 @@
+.tab-list {
+  padding-left: 0;
+}
+
+.tab-list-item {
+  border-radius: 12px;
+  display: inline-block;
+  list-style: none;
+  margin-bottom: -1px;
+  padding: 10px 40px;
+  background-color: #7f8c8d;
+  margin: 10px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.tab-list-item:hover {
+  cursor: pointer;
+  background-color: #2980b9;
+  color: #ecf0f1;
+}
+
+.tab-list-active {
+  background-color: #2980b9;
+  border-width: 1px 1px 0 1px;
+  color: #ecf0f1;
+}

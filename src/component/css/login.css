@@ -1,0 +1,73 @@
+.App {
+  text-align: center;
+}
+
+.login {
+  background-color: #171f32;
+  width: 40%;
+  height: 280px;
+  position: relative;
+  left: 50%;
+  top: 130%;
+  transform: translate(-50%, -50%);
+  border: 2.5px solid #ff611d;
+  border-radius: 20px;
+}
+h2 {
+  color: #ffffff;
+}
+
+.login img {
+  margin-top: 5%;
+  width: 150px;
+}
+
+.login input {
+  margin-top: 5%;
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 20px;
+  border-radius: 12px;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+
+  font-style: italic;
+}
+::-moz-placeholder {
+  /* Firefox 19+ */
+
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  /* IE 10+ */
+
+  font-style: italic;
+}
+:-moz-placeholder {
+  font-style: italic;
+}
+
+.signin,
+.signup {
+  margin-top: 5%;
+  background-color: #101727;
+  color: #edeff5;
+  border: 2px solid #ff611d;
+  width: 40%;
+  border-radius: 8px;
+  height: 40px;
+}
+.signin {
+  margin-left: 6%;
+}
+.signup {
+  margin-left: 1%;
+}
+
+.signin:hover,
+.signup:hover {
+  background-color: #ff611d;
+  color: white;
+}
