@@ -7,11 +7,14 @@ import {
   Container,
   Row,
   Col,
-  Button
+  Button,
+  DropdownButton,
+  Dropdown
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tabs from "../Tabs/Tabs";
 import socketIOClient from "socket.io-client";
+import Swal from "sweetalert2";
 require("../Tabs/style.css");
 require("../css/HR.css");
 
@@ -25,11 +28,21 @@ class HrTabs extends React.Component {
       search: "",
       setShow: false,
       show: false,
-      ref_person: []
+      ref_person: [],
+      btnHidden: true,
+      labelHidden: false,
+      dropdownHidden: true,
+      origBtnHidden: false,
+      dropdownTitle: "Change Status",
+      review: "Reviewed",
+      pending: "Pending Interview",
+      final: "Final Interview",
+      hired: "Hired"
     };
     socket = socketIOClient(this.state.endpoint);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
   changeData = () => socket.emit("GetRefer");
 
@@ -50,12 +63,76 @@ class HrTabs extends React.Component {
     this.setState({ setShow: true, ref_person: found });
   }
 
+  handleSave() {
+    console.log(this.state.ref_person.REF_ID);
+    console.log(this.state.dropdownTitle);
+    if (this.state.dropdownTitle !== "Change Status") {
+      socket.emit(
+        "UpdateStatus",
+        this.state.ref_person.REF_ID,
+        this.state.dropdownTitle
+      );
+      socket.on("change_data", this.changeData);
+      Swal.fire({
+        type: "success",
+        title: "Update success!"
+      });
+      this.setState({
+        labelHidden: false,
+        dropdownHidden: true,
+        btnHidden: true,
+        origBtnHidden: false,
+        dropdownTitle: "Change Status",
+        setShow: false
+      });
+    } else {
+      Swal.fire({
+        type: "error",
+        title: "Select a status!",
+        text: "Change the status!"
+      });
+    }
+  }
+
   handleClose = () => {
     this.setState({ setShow: false });
   };
   handleSearch(event) {
     this.setState({ search: event.target.value });
   }
+
+  handleClickedUpdate = () => {
+    this.setState({
+      labelHidden: true,
+      dropdownHidden: false,
+      btnHidden: false,
+      origBtnHidden: true
+    });
+  };
+
+  handleCancelClicked = () => {
+    this.setState({
+      labelHidden: false,
+      dropdownHidden: true,
+      btnHidden: true,
+      origBtnHidden: false,
+      dropdownTitle: "Change Status"
+    });
+  };
+
+  handleReviwed = () => {
+    this.setState({ dropdownTitle: this.state.review });
+  };
+  handlePending = () => {
+    this.setState({ dropdownTitle: this.state.pending });
+  };
+  handleFinal = () => {
+    this.setState({ dropdownTitle: this.state.final });
+  };
+  handleHired = () => {
+    this.setState({ dropdownTitle: this.state.hired });
+  };
+
   render() {
     let filteredRefs = this.state.refs.filter(ref => {
       return (
@@ -69,7 +146,8 @@ class HrTabs extends React.Component {
           -1 ||
         ref.REF_ADDRESS.toLowerCase().indexOf(
           this.state.search.toLowerCase()
-        ) !== -1
+        ) !== -1 ||
+        ref.STATUS.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1
       );
     });
     return (
@@ -92,9 +170,7 @@ class HrTabs extends React.Component {
               </Jumbotron>
             </div>
           </div>
-          <div className="job_overview" label="Job Overview">
-            <div className="job_overview" />
-          </div>
+
           <div className="candidates" label="Candidates">
             <div className="candidates">
               <div className="search">
@@ -139,6 +215,7 @@ class HrTabs extends React.Component {
                     <th>Position</th>
                     <th>Contact</th>
                     <th>Address</th>
+                    <th>Status</th>
                     <th>Referred by</th>
                   </tr>
                 </thead>
@@ -155,6 +232,7 @@ class HrTabs extends React.Component {
                       <td>{ref.POSITION}</td>
                       <td>{ref.REF_CONTACT}</td>
                       <td>{ref.REF_ADDRESS}</td>
+                      <td>{ref.STATUS}</td>
                       <td>{ref.EMP_NAME}</td>
                     </tr>
                   ))}
@@ -245,7 +323,27 @@ class HrTabs extends React.Component {
                       <Form.Label>Status</Form.Label>
                     </Col>
                     <Col>
-                      <Form.Label>{this.state.ref_person.STATUS}</Form.Label>
+                      <Form.Label hidden={this.state.labelHidden}>
+                        {this.state.ref_person.STATUS}
+                      </Form.Label>
+                      <DropdownButton
+                        hidden={this.state.dropdownHidden}
+                        id="dropdown-item-button"
+                        title={this.state.dropdownTitle}
+                      >
+                        <Dropdown.Item onClick={this.handleReviwed}>
+                          {this.state.review}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={this.handlePending}>
+                          {this.state.pending}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={this.handleFinal}>
+                          {this.state.final}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={this.handleHired}>
+                          {this.state.hired}
+                        </Dropdown.Item>
+                      </DropdownButton>
                     </Col>
                   </Row>
                 </Container>
@@ -258,16 +356,41 @@ class HrTabs extends React.Component {
                 <Col>
                   <Button
                     onClick={this.handleClose}
+                    hidden={this.state.origBtnHidden}
                     variant="primary"
                     className="CloseBtn"
                     size="lg"
                   >
                     Close
                   </Button>
+                  <Button
+                    variant="secondary"
+                    className="CloseBtn"
+                    size="lg"
+                    hidden={this.state.btnHidden}
+                    onClick={this.handleCancelClicked}
+                  >
+                    Cancel
+                  </Button>
                 </Col>
                 <Col>
-                  <Button variant="secondary" className="DeleteBtn" size="lg">
-                    Delete
+                  <Button
+                    hidden={this.state.origBtnHidden}
+                    onClick={this.handleClickedUpdate}
+                    variant="secondary"
+                    className="UpdateBtn"
+                    size="lg"
+                  >
+                    Update
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="SaveBtn"
+                    size="lg"
+                    hidden={this.state.btnHidden}
+                    onClick={this.handleSave}
+                  >
+                    Save
                   </Button>
                 </Col>
               </Row>
