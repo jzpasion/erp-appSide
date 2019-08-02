@@ -3,18 +3,22 @@ import {
   Modal,
   Table,
   Form,
-  Jumbotron,
+  Card,
+  Badge,
+  Popover,
   Container,
   Row,
   Col,
   Button,
   DropdownButton,
-  Dropdown
+  Dropdown,
+  OverlayTrigger
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tabs from "../Tabs/Tabs";
 import socketIOClient from "socket.io-client";
 import Swal from "sweetalert2";
+import _ from "lodash";
 require("../Tabs/style.css");
 require("../css/HR.css");
 
@@ -37,23 +41,53 @@ class HrTabs extends React.Component {
       review: "Reviewed",
       pending: "Pending Interview",
       final: "Final Interview",
-      hired: "Hired"
+      hired: "Hired",
+      position_data: [],
+      review_counter: 0,
+      interview_counter: 0,
+      final_counter: 0,
+      slot: [],
+      slot_counter: 0,
+      setShow2: false,
+      show2: false
     };
     socket = socketIOClient(this.state.endpoint);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleOpenAddPos = this.handleOpenAddPos.bind(this);
   }
+
   changeData = () => socket.emit("GetRefer");
+  changePosition = () => socket.emit("GetPosition");
 
   componentDidMount() {
     socket.on("GetRefers", data => {
       console.log(data);
 
-      this.setState({ refs: data });
+      this.setState({
+        refs: data,
+        review_counter: _.filter(data, { STATUS: "Reviewed" }).length,
+        interview_counter: _.filter(data, { STATUS: "Pending Interview" })
+          .length,
+        final_counter: _.filter(data, { STATUS: "Final Interview" }).length
+      });
     });
-    // console.log(this.state.get_users);
+    socket.on("GetPositions", data => {
+      console.log(data);
+      data.map(slot => {
+        return this.state.slot.push(slot.SLOT);
+      });
+
+      // console.log(_.add(this.state.slot));
+
+      this.setState({
+        position_data: data,
+        slot_counter: this.state.slot.reduce((a, b) => a + b, 0)
+      });
+    });
   }
+
   handleOpen(x) {
     console.log(x);
     let found = this.state.refs.find(function(usid) {
@@ -62,6 +96,12 @@ class HrTabs extends React.Component {
 
     this.setState({ setShow: true, ref_person: found });
   }
+  handleOpenAddPos() {
+    this.setState({ setShow2: true });
+  }
+  handleCloseAddPos = () => {
+    this.setState({ setShow2: false });
+  };
 
   handleSave() {
     console.log(this.state.ref_person.REF_ID);
@@ -156,18 +196,158 @@ class HrTabs extends React.Component {
         <Tabs className="tabs">
           <div label="Overview">
             <div className="overview">
-              <Jumbotron fluid>
-                <Container>
-                  <Row>
-                    <Col xs={6} md={4} style={{ backgroundColor: "blue" }}>
-                      xs=6 md=4
-                    </Col>
-                    <Col xs={12} md={8}>
-                      xs=12 md=8
-                    </Col>
-                  </Row>
-                </Container>
-              </Jumbotron>
+              <Container>
+                <Row>
+                  <Col>
+                    <h3>Summary</h3>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>Hiring Position</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.position_data.length}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>Candidates</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.refs.length}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <Card
+                      style={{
+                        width: "20rem",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>Reviewed</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.review_counter}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+
+                <Row className="row-class">
+                  <Col>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>For Interview</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.interview_counter}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <Card
+                      style={{
+                        width: "100%",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>Final Interview</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.final_counter}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col>
+                    <Card
+                      style={{
+                        width: "20rem",
+                        height: "220px",
+                        backgroundColor: "#171f32",
+                        borderRadius: "12px",
+                        color: "#cccfd3",
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        fontFamily: "Trebuchet MS"
+                        // borderColor: "#ff611d"
+                      }}
+                    >
+                      <Card.Body>
+                        <p style={{ fontSize: "40px" }}>Slots</p>
+                        <p style={{ fontSize: "80px" }}>
+                          {this.state.slot_counter}
+                        </p>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <button onClick={this.handleOpenAddPos} className="addBtn">
+                      Add Position
+                    </button>
+                  </Col>
+                </Row>
+              </Container>
             </div>
           </div>
 
@@ -267,10 +447,10 @@ class HrTabs extends React.Component {
               <Form.Group as={Row} controlId="formPlaintextEmail">
                 <Container>
                   <Row>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={4}>
                       <Form.Label>Position</Form.Label>
                     </Col>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
                       <Form.Label>{this.state.ref_person.POSITION}</Form.Label>
                     </Col>
                   </Row>
@@ -279,10 +459,10 @@ class HrTabs extends React.Component {
               <Form.Group as={Row} controlId="formPlaintextEmail">
                 <Container>
                   <Row>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={4}>
                       <Form.Label>Contact</Form.Label>
                     </Col>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
                       <Form.Label>
                         {this.state.ref_person.REF_CONTACT}
                       </Form.Label>
@@ -293,10 +473,10 @@ class HrTabs extends React.Component {
               <Form.Group as={Row} controlId="formPlaintextEmail">
                 <Container>
                   <Row>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={4}>
                       <Form.Label>Address</Form.Label>
                     </Col>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
                       <Form.Label>
                         {this.state.ref_person.REF_ADDRESS}
                       </Form.Label>
@@ -307,10 +487,10 @@ class HrTabs extends React.Component {
               <Form.Group as={Row} controlId="formPlaintextEmail">
                 <Container>
                   <Row>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={4}>
                       <Form.Label>Referred by</Form.Label>
                     </Col>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
                       <Form.Label>{this.state.ref_person.EMP_NAME}</Form.Label>
                     </Col>
                   </Row>
@@ -319,10 +499,10 @@ class HrTabs extends React.Component {
               <Form.Group as={Row} controlId="formPlaintextEmail">
                 <Container>
                   <Row>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={4}>
                       <Form.Label>Status</Form.Label>
                     </Col>
-                    <Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
                       <Form.Label hidden={this.state.labelHidden}>
                         {this.state.ref_person.STATUS}
                       </Form.Label>
@@ -391,6 +571,86 @@ class HrTabs extends React.Component {
                     onClick={this.handleSave}
                   >
                     Save
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.state.setShow2}
+          size="md"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="modal"
+        >
+          <Modal.Header className="modal-header">
+            <Modal.Title style={{ textAlign: "center" }}>
+              <Container style={{ textAlign: "center" }}>
+                <Row>
+                  <Col>
+                    <h2>Add Position</h2>
+                  </Col>
+                </Row>
+              </Container>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            <Form className="form-body">
+              <Form.Group as={Row} controlId="formPlaintextEmail">
+                <Container>
+                  <Row>
+                    <Col style={{ textAlign: "left" }} sm={4}>
+                      <Form.Label>Position</Form.Label>
+                    </Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
+                      <input type="text" />
+                    </Col>
+                  </Row>
+                </Container>
+              </Form.Group>
+              <Form.Group as={Row} controlId="formPlaintextEmail">
+                <Container>
+                  <Row>
+                    <Col style={{ textAlign: "left" }} sm={4}>
+                      <Form.Label>Description</Form.Label>
+                    </Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
+                      <input type="text" />
+                    </Col>
+                  </Row>
+                </Container>
+              </Form.Group>
+              <Form.Group as={Row} controlId="formPlaintextEmail">
+                <Container>
+                  <Row>
+                    <Col style={{ textAlign: "left" }} sm={4}>
+                      <Form.Label>Slots</Form.Label>
+                    </Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
+                      <input type="number" />
+                    </Col>
+                  </Row>
+                </Container>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer className="modal-body">
+            <Container>
+              <Row>
+                <Col>
+                  <Button
+                    onClick={this.handleCloseAddPos}
+                    variant="primary"
+                    className="CloseBtn"
+                    size="lg"
+                  >
+                    Close
+                  </Button>
+                </Col>
+                <Col>
+                  <Button variant="secondary" className="UpdateBtn" size="lg">
+                    Add
                   </Button>
                 </Col>
               </Row>

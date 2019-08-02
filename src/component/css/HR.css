@@ -1,6 +1,6 @@
 h1 {
   margin-top: 30px;
-  color: red;
+  color: #ffffff;
 }
 
 .search input {
@@ -57,4 +57,25 @@ tr:nth-child(even) {
   border: 2px solid #2980b9;
   height: 50px;
   border-radius: 12px;
+}
+
+.addBtn {
+  margin-top: 1.5%;
+  background-color: #171f32;
+  color: #ffffff;
+  width: 50%;
+  border-radius: 12px;
+  border: none;
+  height: 40px;
+  font-family: "Trebuchet MS";
+}
+
+.addBtn:hover {
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  background-color: #ff611d;
+  color: white;
+}
+.row-class {
+  margin-top: 1.5%;
 }

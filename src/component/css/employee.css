@@ -16,8 +16,24 @@
 img {
   width: 300px;
 }
+.container-class {
+  height: 400px;
+  overflow: auto;
+  margin-bottom: 30px;
+  /* background-color: #171f32; */
+}
+.card {
+  background-color: #171f32;
+  color: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 1.5%;
+}
+h3 {
+  margin-bottom: 1.5%;
+  color: #fff;
+}
 .footer {
-  position: absolute;
+  position: relative;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -42,17 +58,7 @@ img {
   color: white;
 }
 
-.card1:hover {
-  border-color: #ff611d;
-  cursor: pointer;
-}
-
-.card2:hover {
-  border-color: #ff611d;
-  cursor: pointer;
-}
-
-.card3:hover {
+.card:hover {
   border-color: #ff611d;
   cursor: pointer;
 }

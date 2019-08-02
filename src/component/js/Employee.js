@@ -7,14 +7,12 @@ import {
   Col,
   Card,
   Button,
-  Modal
+  Modal,
+  Badge
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/employee.css";
 import logo from "../2.png";
-import HR from "../hr.png";
-import ACC from "../acc.png";
-import CODE from "../code.png";
 import Swal from "sweetalert2";
 
 var socket;
@@ -31,7 +29,8 @@ export default class Employee extends React.Component {
       ref_fname: "",
       ref_add: "",
       ref_contact: "",
-      ref_email: ""
+      ref_email: "",
+      pos_data: []
     };
     socket = socketIOClient(this.state.endpoint);
     this.empNameHandleChange = this.empNameHandleChange.bind(this);
@@ -40,9 +39,18 @@ export default class Employee extends React.Component {
     this.refAddHandleChange = this.refAddHandleChange.bind(this);
     this.refContactHandleChange = this.refContactHandleChange.bind(this);
     this.refEmailHandleChange = this.refEmailHandleChange.bind(this);
+    this.card1ModalOpen = this.card1ModalOpen.bind(this);
   }
 
   changeData = () => socket.emit("GetRefer");
+  changePosition = () => socket.emit("GetPosition");
+
+  componentDidMount() {
+    socket.on("GetPositions", data => {
+      console.log(data);
+      this.setState({ pos_data: data });
+    });
+  }
 
   empNameHandleChange(event) {
     this.setState({ emp_name: event.target.value });
@@ -63,15 +71,11 @@ export default class Employee extends React.Component {
     this.setState({ ref_email: event.target.value });
   }
 
-  card1ModalOpen = () => {
-    this.setState({ setShow: true, position: "HR Assistant" });
-    console.log("hello");
-  };
+  card1ModalOpen(x) {
+    console.log(x);
 
-  card2ModalOpen = () => {
-    this.setState({ setShow: true, position: "Accounting" });
-    console.log("hello");
-  };
+    this.setState({ setShow: true, position: x });
+  }
 
   card1ModalClose = () => {
     this.setState({
@@ -149,7 +153,7 @@ export default class Employee extends React.Component {
                 <Alert>
                   <Alert.Heading>
                     <p className="erp-head">
-                      EMPLOYEE <br /> REFERAL PROGRAM
+                      EMPLOYEE <br /> REFERRAL PROGRAM
                     </p>
                   </Alert.Heading>
                   <p>
@@ -170,7 +174,7 @@ export default class Employee extends React.Component {
           </Container>
         </div>
         <hr style={{ border: "1px solid #ff611d" }} />
-        <Container>
+        {/* <Container>
           <Row>
             <Col>
               <Card
@@ -280,7 +284,47 @@ export default class Employee extends React.Component {
               </Card>
             </Col>
           </Row>
+        </Container> */}
+
+        <Container className="container-class">
+          <Row>
+            <Col>
+              <h3>Hiring Position </h3>
+            </Col>
+          </Row>
+          {this.state.pos_data.map(pos => (
+            <Row key={pos.POS_ID}>
+              <Col>
+                <Card className="card">
+                  <Card.Body>
+                    <Row>
+                      <Col>
+                        <Card.Title>
+                          {pos.POSITION}{" "}
+                          <Badge variant="light">{pos.SLOT}</Badge>
+                        </Card.Title>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col sm={8}>
+                        <Card.Text>{pos.DESCRIPTION}</Card.Text>
+                      </Col>
+                      <Col sm={4}>
+                        <button
+                          onClick={() => this.card1ModalOpen(pos.POSITION)}
+                          className="button button1"
+                        >
+                          Refer
+                        </button>
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          ))}
         </Container>
+
         <div className="footer">
           <p>
             Warehouse No. 5 Theme Builders Compound, Sitio Cubol Brgy.
@@ -296,14 +340,14 @@ export default class Employee extends React.Component {
           className="modal"
         >
           <Modal.Header className="modal-header">
-            <Modal.Title align="center">
+            <Modal.Title>
               <h3>EMPLOYEE REFERRAL PROGRAM</h3>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body className="modal-body">
             <Container>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   Postion:
                 </Col>
                 <Col xs={12} md={8}>
@@ -311,7 +355,7 @@ export default class Employee extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   Last Name:
                 </Col>
                 <Col xs={12} md={8}>
@@ -324,7 +368,7 @@ export default class Employee extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   First Name:
                 </Col>
                 <Col xs={12} md={8}>
@@ -337,7 +381,7 @@ export default class Employee extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   Contact:
                 </Col>
                 <Col xs={12} md={8}>
@@ -352,7 +396,7 @@ export default class Employee extends React.Component {
               <Row>
                 <Col>
                   <Row>
-                    <Col xs={6} md={4}>
+                    <Col style={{ textAlign: "left" }} xs={6} md={4}>
                       Email:
                     </Col>
                     <Col xs={12} md={8}>
@@ -367,7 +411,7 @@ export default class Employee extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   Address:
                 </Col>
                 <Col xs={12} md={8}>
@@ -380,7 +424,7 @@ export default class Employee extends React.Component {
                 </Col>
               </Row>
               <Row>
-                <Col xs={6} md={4}>
+                <Col style={{ textAlign: "left" }} xs={6} md={4}>
                   Referred By:
                 </Col>
                 <Col xs={12} md={8}>
@@ -404,7 +448,7 @@ export default class Employee extends React.Component {
                     className="CloseBtn"
                     size="lg"
                   >
-                    Cancel
+                    Close
                   </Button>
                 </Col>
                 <Col>
