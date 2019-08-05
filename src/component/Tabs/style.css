@@ -8,20 +8,22 @@
   list-style: none;
   margin-bottom: -1px;
   padding: 10px 40px;
-  background-color: #7f8c8d;
+  background-color: #171f32;
   margin: 10px;
+  font-family: "Trebuchet MS";
+  color: #ffffff;
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
 
 .tab-list-item:hover {
   cursor: pointer;
-  background-color: #2980b9;
-  color: #ecf0f1;
+  background-color: #cccfd3;
+  color: #101727;
 }
 
 .tab-list-active {
-  background-color: #2980b9;
+  background-color: #cccfd3;
   border-width: 1px 1px 0 1px;
-  color: #ecf0f1;
+  color: #101727;
 }

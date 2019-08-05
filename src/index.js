@@ -12,6 +12,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import * as serviceWorker from "./serviceWorker";
+import HRLogin from "./component/js/LoginHR";
 
 const routing = (
   <Router>
@@ -38,16 +39,22 @@ const routing = (
               Contact
             </Link>
           </Nav>
+          <Nav>
+            <Link className="lastlink" to="/HRLogin">
+              Log In
+            </Link>
+          </Nav>
         </Navbar.Collapse>
       </Navbar>
 
       <Switch>
         <Route exact path="/" component={Login} />
         <Route exact path="/employee/" component={Employee} />
-        <Route exact path="/HR/" component={HR} />
+        <Route exact path="/6RXYPvzzDGiNphnUrytD/" component={HR} />
         <Route exact path="/aboutERP/" component={AboutERP} />
         <Route exact path="/aboutLago/" component={AboutLago} />
         <Route exact path="/Contact/" component={Contact} />
+        <Route exact path="/HRLogin/" component={HRLogin} />
       </Switch>
     </div>
   </Router>

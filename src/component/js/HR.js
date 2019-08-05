@@ -5,14 +5,12 @@ import {
   Form,
   Card,
   Badge,
-  Popover,
   Container,
   Row,
   Col,
   Button,
   DropdownButton,
-  Dropdown,
-  OverlayTrigger
+  Dropdown
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Tabs from "../Tabs/Tabs";
@@ -49,13 +47,34 @@ class HrTabs extends React.Component {
       slot: [],
       slot_counter: 0,
       setShow2: false,
-      show2: false
+      show2: false,
+      isHovering: false,
+      isHovering2: false,
+      indicatorHidden: false,
+      indicatorHidden2: false,
+      position_input: "",
+      description_input: "",
+      slot_input: 0,
+      deleteLabelhidden: false,
+      deleteBtnhidden: false,
+      deleteLabelhidden2: true,
+      deleteBtnhidden2: true,
+      titleModal: "Add Postion",
+      dropdownTitle2: "Select Position",
+      setShow3: false,
+      show3: false
     };
     socket = socketIOClient(this.state.endpoint);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleOpen = this.handleOpen.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleOpenAddPos = this.handleOpenAddPos.bind(this);
+    this.handleMouseHover = this.handleMouseHover.bind(this);
+    this.handleMouseHover2 = this.handleMouseHover2.bind(this);
+    this.handlePosition = this.handlePosition.bind(this);
+    this.handleDescription = this.handleDescription.bind(this);
+    this.handleSlot = this.handleSlot.bind(this);
+    this.handleChangeTitle = this.handleChangeTitle.bind(this);
   }
 
   changeData = () => socket.emit("GetRefer");
@@ -88,6 +107,25 @@ class HrTabs extends React.Component {
     });
   }
 
+  handleMouseHover() {
+    this.setState(this.toggleHoverState);
+  }
+  handleMouseHover2() {
+    this.setState(this.toggleHoverState2);
+  }
+
+  toggleHoverState(state) {
+    return {
+      isHovering: !state.isHovering,
+      indicatorHidden: !state.indicatorHidden
+    };
+  }
+  toggleHoverState2(state) {
+    return {
+      isHovering2: !state.isHovering2,
+      indicatorHidden2: !state.indicatorHidden2
+    };
+  }
   handleOpen(x) {
     console.log(x);
     let found = this.state.refs.find(function(usid) {
@@ -100,7 +138,12 @@ class HrTabs extends React.Component {
     this.setState({ setShow2: true });
   }
   handleCloseAddPos = () => {
-    this.setState({ setShow2: false });
+    this.setState({
+      setShow2: false,
+      position_input: "",
+      description_input: "",
+      slot_input: 0
+    });
   };
 
   handleSave() {
@@ -173,6 +216,133 @@ class HrTabs extends React.Component {
     this.setState({ dropdownTitle: this.state.hired });
   };
 
+  handlePosition(event) {
+    this.setState({ position_input: event.target.value });
+  }
+  handleDescription(event) {
+    this.setState({ description_input: event.target.value });
+  }
+  handleSlot(event) {
+    this.setState({ slot_input: event.target.value });
+  }
+  handleAddPosition = () => {
+    if (
+      this.state.position_input !== "" &&
+      this.state.description_input !== ""
+    ) {
+      socket.emit(
+        "AddPosition",
+        this.state.position_input,
+        this.state.description_input,
+        this.state.slot_input
+      );
+      socket.on("change_data", this.changePosition);
+      Swal.fire({
+        type: "success",
+        title: " " + this.state.position_input + " Added!"
+      });
+      this.setState({
+        setShow2: false,
+        position_input: "",
+        description_input: "",
+        slot_input: 0
+      });
+    } else {
+      Swal.fire({
+        type: "error",
+        title: "Attention!",
+        text: "Please fill all required fields!"
+      });
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({
+      deleteLabelhidden: false,
+      deleteBtnhidden: false,
+      deleteLabelhidden2: true,
+      deleteBtnhidden2: true,
+      titleModal: "Add Position",
+      dropdownTitle2: "Select Position"
+    });
+  };
+  handleDelete = () => {
+    this.setState({
+      deleteLabelhidden: true,
+      deleteBtnhidden: true,
+      deleteLabelhidden2: false,
+      deleteBtnhidden2: false,
+      titleModal: "Delete Position"
+    });
+  };
+
+  handleChangeTitle(pos) {
+    this.setState({ dropdownTitle2: pos });
+  }
+  handleDeleteSave = () => {
+    if (this.state.dropdownTitle2 !== "Select Position") {
+      socket.emit("DeletePosition", this.state.dropdownTitle2);
+      socket.on("change_data", this.changePosition);
+      Swal.fire({
+        type: "success",
+        title: " " + this.state.dropdownTitle2 + " Deleted!"
+      });
+    } else {
+      Swal.fire({
+        type: "error",
+        title: "Attention!",
+        text: "Please select a Position inside the dropdown!"
+      });
+    }
+    this.setState({ setShow2: false, dropdownTitle2: "Select Position" });
+  };
+  closeUpdate = () => {
+    this.setState({
+      setShow3: false,
+      slot_input: 0,
+      titleModal: "Add Slot",
+      setShow2: true,
+      dropdownTitle2: "Select Position"
+    });
+  };
+  openUpdate = () => {
+    this.setState({
+      setShow3: true,
+      setShow2: false,
+      titleModal: "Update Slot"
+    });
+  };
+
+  handleUpdate = () => {
+    console.log(this.state.dropdownTitle2);
+    console.log(this.state.slot_input);
+
+    if (this.state.dropdownTitle2 !== "Select Position") {
+      socket.emit(
+        "UpdateSlot",
+        this.state.dropdownTitle2,
+        this.state.slot_input
+      );
+      socket.on("change_data", this.changePosition);
+
+      Swal.fire({
+        type: "success",
+        title: "Slot Updated!"
+      });
+      this.setState({
+        dropdownTitle2: "Select Position",
+        slot_input: 0,
+        setShow3: false,
+        setShow2: true
+      });
+    } else {
+      Swal.fire({
+        type: "error",
+        title: "Attention!",
+        text: "Please select a Position inside the dropdown!"
+      });
+    }
+  };
   render() {
     let filteredRefs = this.state.refs.filter(ref => {
       return (
@@ -192,20 +362,22 @@ class HrTabs extends React.Component {
     });
     return (
       <div className="App">
-        <h1>ERP SYSTEM</h1>
+        <h1>EMPLOYEE REFERRAL PROGRAM SYSTEM</h1>
         <Tabs className="tabs">
           <div label="Overview">
             <div className="overview">
               <Container>
                 <Row>
                   <Col>
-                    <h3>Summary</h3>
+                    <h3 style={{ color: "#cccfd3" }}>Summary</h3>
                   </Col>
                 </Row>
 
                 <Row>
                   <Col>
                     <Card
+                      onMouseEnter={this.handleMouseHover}
+                      onMouseLeave={this.handleMouseHover}
                       style={{
                         width: "100%",
                         height: "220px",
@@ -214,15 +386,41 @@ class HrTabs extends React.Component {
                         color: "#cccfd3",
                         borderStyle: "solid",
                         borderWidth: "1px",
-                        fontFamily: "Trebuchet MS"
+                        fontFamily: "Trebuchet MS",
+                        position: "relative",
+                        zIndex: "1",
+                        overflow: "hidden",
+                        TextAlign: "center"
                         // borderColor: "#ff611d"
                       }}
                     >
-                      <Card.Body>
-                        <p style={{ fontSize: "40px" }}>Hiring Position</p>
-                        <p style={{ fontSize: "80px" }}>
+                      <Card.Body className="hiring_static">
+                        <p
+                          hidden={this.state.indicatorHidden}
+                          style={{ fontSize: "40px" }}
+                        >
+                          Hiring Position
+                        </p>
+                        <p
+                          hidden={this.state.indicatorHidden}
+                          style={{ fontSize: "80px" }}
+                        >
                           {this.state.position_data.length}
                         </p>
+                        {this.state.isHovering && (
+                          <div>
+                            <Card className="poshead">
+                              {this.state.position_data.map(ref => (
+                                <Card.Header
+                                  className="posbody"
+                                  key={ref.POS_ID}
+                                >
+                                  {ref.POSITION}
+                                </Card.Header>
+                              ))}
+                            </Card>
+                          </div>
+                        )}
                       </Card.Body>
                     </Card>
                   </Col>
@@ -237,6 +435,7 @@ class HrTabs extends React.Component {
                         borderStyle: "solid",
                         borderWidth: "1px",
                         fontFamily: "Trebuchet MS"
+
                         // borderColor: "#ff611d"
                       }}
                     >
@@ -319,6 +518,8 @@ class HrTabs extends React.Component {
                   </Col>
                   <Col>
                     <Card
+                      onMouseEnter={this.handleMouseHover2}
+                      onMouseLeave={this.handleMouseHover2}
                       style={{
                         width: "20rem",
                         height: "220px",
@@ -327,15 +528,49 @@ class HrTabs extends React.Component {
                         color: "#cccfd3",
                         borderStyle: "solid",
                         borderWidth: "1px",
-                        fontFamily: "Trebuchet MS"
+                        fontFamily: "Trebuchet MS",
+                        position: "relative",
+                        overflow: "hidden",
+                        zIndex: "1"
                         // borderColor: "#ff611d"
                       }}
                     >
-                      <Card.Body>
-                        <p style={{ fontSize: "40px" }}>Slots</p>
-                        <p style={{ fontSize: "80px" }}>
+                      <Card.Body className="hiring_static">
+                        <p
+                          hidden={this.state.indicatorHidden2}
+                          style={{ fontSize: "40px" }}
+                        >
+                          Slots
+                        </p>
+                        <p
+                          hidden={this.state.indicatorHidden2}
+                          style={{ fontSize: "80px" }}
+                        >
                           {this.state.slot_counter}
                         </p>
+                        {this.state.isHovering2 && (
+                          <div>
+                            <Card className="poshead">
+                              {this.state.position_data.map(ref => (
+                                <Card.Header
+                                  className="posbody"
+                                  key={ref.POS_ID}
+                                >
+                                  <Container>
+                                    <Row>
+                                      <Col sm={8}>{ref.POSITION}</Col>
+                                      <Col sm={4}>
+                                        <Badge variant="light">
+                                          {ref.SLOT}
+                                        </Badge>
+                                      </Col>
+                                    </Row>
+                                  </Container>
+                                </Card.Header>
+                              ))}
+                            </Card>
+                          </div>
+                        )}
                       </Card.Body>
                     </Card>
                   </Col>
@@ -343,7 +578,7 @@ class HrTabs extends React.Component {
                 <Row>
                   <Col>
                     <button onClick={this.handleOpenAddPos} className="addBtn">
-                      Add Position
+                      Position Settings
                     </button>
                   </Col>
                 </Row>
@@ -361,34 +596,13 @@ class HrTabs extends React.Component {
                   placeholder="Search"
                 />
               </div>
-              <Form className="radios">
-                <Form.Check
-                  style={{ color: "red" }}
-                  custom
-                  inline
-                  label="HR Assistant"
-                  type="checkbox"
-                  id={`custom-inline-radio-1`}
-                />
-                <Form.Check
-                  style={{ color: "red" }}
-                  custom
-                  inline
-                  label="Accounting"
-                  type="checkbox"
-                  id={`custom-inline-radio-2`}
-                />
-                <Form.Check
-                  style={{ color: "red" }}
-                  custom
-                  inline
-                  label="testFilter"
-                  type="checkbox"
-                  id={`custom-inline-radio-3`}
-                />
-              </Form>
 
-              <Table className="table-div" align="center" size="sm">
+              <Table
+                responsive="md"
+                className="table-div"
+                align="center"
+                size="sm"
+              >
                 <thead style={{ color: "#ffffff" }}>
                   <tr>
                     <th>Name</th>
@@ -589,7 +803,7 @@ class HrTabs extends React.Component {
               <Container style={{ textAlign: "center" }}>
                 <Row>
                   <Col>
-                    <h2>Add Position</h2>
+                    <h2>{this.state.titleModal}</h2>
                   </Col>
                 </Row>
               </Container>
@@ -604,7 +818,28 @@ class HrTabs extends React.Component {
                       <Form.Label>Position</Form.Label>
                     </Col>
                     <Col style={{ textAlign: "left" }} sm={8}>
-                      <input type="text" />
+                      <input
+                        hidden={this.state.deleteLabelhidden}
+                        onChange={this.handlePosition}
+                        value={this.state.position_input}
+                        type="text"
+                      />
+                      <DropdownButton
+                        id="dropdown-basic-button"
+                        title={this.state.dropdownTitle2}
+                        hidden={this.state.deleteLabelhidden2}
+                      >
+                        {this.state.position_data.map(pos => (
+                          <Dropdown.Item
+                            key={pos.POS_ID}
+                            onClick={() => {
+                              this.handleChangeTitle(pos.POSITION);
+                            }}
+                          >
+                            {pos.POSITION}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
                     </Col>
                   </Row>
                 </Container>
@@ -613,10 +848,17 @@ class HrTabs extends React.Component {
                 <Container>
                   <Row>
                     <Col style={{ textAlign: "left" }} sm={4}>
-                      <Form.Label>Description</Form.Label>
+                      <Form.Label hidden={this.state.deleteLabelhidden}>
+                        Description
+                      </Form.Label>
                     </Col>
                     <Col style={{ textAlign: "left" }} sm={8}>
-                      <input type="text" />
+                      <input
+                        hidden={this.state.deleteLabelhidden}
+                        onChange={this.handleDescription}
+                        value={this.state.description_input}
+                        type="text"
+                      />
                     </Col>
                   </Row>
                 </Container>
@@ -625,10 +867,17 @@ class HrTabs extends React.Component {
                 <Container>
                   <Row>
                     <Col style={{ textAlign: "left" }} sm={4}>
-                      <Form.Label>Slots</Form.Label>
+                      <Form.Label hidden={this.state.deleteLabelhidden}>
+                        Slots
+                      </Form.Label>
                     </Col>
                     <Col style={{ textAlign: "left" }} sm={8}>
-                      <input type="number" />
+                      <input
+                        hidden={this.state.deleteLabelhidden}
+                        onChange={this.handleSlot}
+                        value={this.state.slot_input}
+                        type="number"
+                      />
                     </Col>
                   </Row>
                 </Container>
@@ -640,6 +889,7 @@ class HrTabs extends React.Component {
               <Row>
                 <Col>
                   <Button
+                    hidden={this.state.deleteBtnhidden}
                     onClick={this.handleCloseAddPos}
                     variant="primary"
                     className="CloseBtn"
@@ -647,10 +897,148 @@ class HrTabs extends React.Component {
                   >
                     Close
                   </Button>
+                  <Button
+                    hidden={this.state.deleteBtnhidden2}
+                    onClick={this.handleCancel}
+                    variant="secondary"
+                    className="CloseBtn"
+                    size="lg"
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+                <Col hidden={this.state.deleteBtnhidden}>
+                  <Button
+                    hidden={this.state.deleteBtnhidden}
+                    onClick={this.handleDelete}
+                    variant="secondary"
+                    className="DeleteBtn"
+                    size="lg"
+                  >
+                    Delete
+                  </Button>
                 </Col>
                 <Col>
-                  <Button variant="secondary" className="UpdateBtn" size="lg">
+                  <Button
+                    hidden={this.state.deleteBtnhidden}
+                    onClick={this.handleAddPosition}
+                    variant="secondary"
+                    className="AddingBtn"
+                    size="lg"
+                  >
                     Add
+                  </Button>
+                  <Button
+                    hidden={this.state.deleteBtnhidden2}
+                    onClick={this.handleDeleteSave}
+                    variant="secondary"
+                    className="SaveBtn"
+                    size="lg"
+                  >
+                    Save
+                  </Button>
+                </Col>
+              </Row>
+              <Row hidden={this.state.deleteBtnhidden}>
+                <Col>
+                  <button
+                    style={{ marginTop: "1.5%" }}
+                    onClick={this.openUpdate}
+                    hidden={this.state.deleteBtnhidden}
+                    className="UpdateBtn"
+                  >
+                    Update Slot
+                  </button>
+                </Col>
+              </Row>
+            </Container>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.state.setShow3}
+          size="md"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className="modal"
+        >
+          <Modal.Header className="modal-header">
+            <Modal.Title style={{ textAlign: "center" }}>
+              <Container style={{ textAlign: "center" }}>
+                <Row>
+                  <Col>
+                    <h2>{this.state.titleModal}</h2>
+                  </Col>
+                </Row>
+              </Container>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            <Form className="form-body">
+              <Form.Group as={Row} controlId="formPlaintextEmail">
+                <Container>
+                  <Row>
+                    <Col style={{ textAlign: "left" }} sm={4}>
+                      <Form.Label>Position</Form.Label>
+                    </Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
+                      <DropdownButton
+                        id="dropdown-basic-button"
+                        title={this.state.dropdownTitle2}
+                      >
+                        {this.state.position_data.map(pos => (
+                          <Dropdown.Item
+                            key={pos.POS_ID}
+                            onClick={() => {
+                              this.handleChangeTitle(pos.POSITION);
+                            }}
+                          >
+                            {pos.POSITION}
+                          </Dropdown.Item>
+                        ))}
+                      </DropdownButton>
+                    </Col>
+                  </Row>
+                </Container>
+              </Form.Group>
+              <Form.Group as={Row} controlId="formPlaintextEmail">
+                <Container>
+                  <Row>
+                    <Col style={{ textAlign: "left" }} sm={4}>
+                      <Form.Label>Slots</Form.Label>
+                    </Col>
+                    <Col style={{ textAlign: "left" }} sm={8}>
+                      <input
+                        onChange={this.handleSlot}
+                        value={this.state.slot_input}
+                        type="number"
+                      />
+                    </Col>
+                  </Row>
+                </Container>
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer className="modal-body">
+            <Container>
+              <Row>
+                <Col>
+                  <Button
+                    onClick={this.closeUpdate}
+                    variant="primary"
+                    className="CloseBtn"
+                    size="lg"
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    onClick={this.handleUpdate}
+                    variant="secondary"
+                    className="SaveBtn"
+                    size="lg"
+                  >
+                    Save
                   </Button>
                 </Col>
               </Row>

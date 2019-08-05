@@ -13,13 +13,20 @@ code {
 }
 
 .links {
-  color: rgb(185, 174, 174);
+  color: #cccfd3;
   text-decoration: none;
   font-family: "Trebuchet MS";
-  padding-right: 20px;
+  padding-right: 40px;
 }
 
-.links:hover {
+.lastlink {
+  color: #cccfd3;
+  text-decoration: none;
+  font-family: "Trebuchet MS";
+  padding-right: 10px;
+}
+.links:hover,
+.lastlink:hover {
   color: white;
   text-decoration: none;
 }

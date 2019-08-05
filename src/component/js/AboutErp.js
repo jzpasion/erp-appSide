@@ -41,13 +41,6 @@ export default class AboutERP extends React.Component {
             </Row>
           </Container>
         </div>
-
-        <div className="footer">
-          <p>
-            All rights reserved 2019 | © Develop by: Jeremiah Zyrel Pasion •
-            Mark Wiliz | Lagotronics Philippines Inc.
-          </p>
-        </div>
       </div>
     );
   }

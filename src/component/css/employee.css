@@ -80,6 +80,11 @@ h3 {
   border-radius: 12px;
   font-family: "Trebuchet MS";
 }
+
+.ReferBtn:hover {
+  background-color: #75c46b;
+  color: #ffffff;
+}
 .modal-body {
   text-align: center;
   color: #ffffff;

@@ -327,9 +327,8 @@ export default class Employee extends React.Component {
 
         <div className="footer">
           <p>
-            Warehouse No. 5 Theme Builders Compound, Sitio Cubol Brgy.
-            Sapalibutad Angeles City 2009, Pampanga Philippines +63.45.624.7098
-            • +63.05.675.2015 • www.lagotronics.ph • www.lagotronicsprojects.com
+            All rights reserved 2019 | © Develop by: Zyrel Pasion • Mark Wiliz |
+            Lagotronics Philippines Inc.
           </p>
         </div>
         <Modal
