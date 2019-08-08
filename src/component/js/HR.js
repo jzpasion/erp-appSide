@@ -75,6 +75,7 @@ class HrTabs extends React.Component {
     this.handleDescription = this.handleDescription.bind(this);
     this.handleSlot = this.handleSlot.bind(this);
     this.handleChangeTitle = this.handleChangeTitle.bind(this);
+    this.handleDeleteRefs = this.handleDeleteRefs.bind(this);
   }
 
   changeData = () => socket.emit("GetRefer");
@@ -343,6 +344,45 @@ class HrTabs extends React.Component {
       });
     }
   };
+
+  handleDeleteRefs() {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: true
+    });
+
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+      })
+      .then(result => {
+        if (result.value) {
+          console.log(this.state.ref_person.REF_ID);
+          socket.emit("DeleteRef", this.state.ref_person.REF_ID);
+          socket.on("change_data", this.changeData);
+          swalWithBootstrapButtons.fire(
+            "Deleted!",
+            "Your file has been deleted.",
+            "success"
+          );
+          this.setState({ setShow: false });
+        } else if (
+          // Read more about handling dismissals
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire("Cancelled", "", "error");
+        }
+      });
+  }
   render() {
     let filteredRefs = this.state.refs.filter(ref => {
       return (
@@ -785,6 +825,17 @@ class HrTabs extends React.Component {
                     onClick={this.handleSave}
                   >
                     Save
+                  </Button>
+                </Col>
+                <Col hidden={this.state.origBtnHidden}>
+                  <Button
+                    variant="secondary"
+                    className="DeleteBtn"
+                    size="lg"
+                    hidden={this.state.origBtnHidden}
+                    onClick={this.handleDeleteRefs}
+                  >
+                    Delete
                   </Button>
                 </Col>
               </Row>
