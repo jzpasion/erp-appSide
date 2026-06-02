@@ -1,43 +1,41 @@
-::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
+/* HR login card — shares .auth-page / .auth-actions / .signin / .signup
+   from login.css. Only the card + inputs differ. */
 
+.hrlogin {
+  background-color: var(--surface);
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 28px 32px;
+  border: 2px solid var(--accent);
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hrlogin img {
+  width: 180px;
+  max-width: 70%;
+  height: auto;
+  margin: 4px auto 18px;
+}
+
+.hrlogin .user {
+  margin-top: 14px;
+  width: 100%;
+  font-size: 15px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+}
+
+::-webkit-input-placeholder {
   font-style: italic;
 }
 ::-moz-placeholder {
-  /* Firefox 19+ */
-
   font-style: italic;
 }
 :-ms-input-placeholder {
-  /* IE 10+ */
-
   font-style: italic;
 }
 :-moz-placeholder {
   font-style: italic;
-}
-
-.hrlogin {
-  background-color: #171f32;
-  width: 40%;
-  height: 350px;
-  position: relative;
-  left: 50%;
-  top: 130%;
-  transform: translate(-50%, -50%);
-  border: 2.5px solid #ff611d;
-  border-radius: 20px;
-}
-
-.hrlogin img {
-  margin-top: 5%;
-  width: 150px;
-}
-
-.hrlogin input {
-  margin-top: 5%;
-  width: 70%;
-  font-size: 15px;
-  padding: 6px 30px;
-  border-radius: 12px;
 }

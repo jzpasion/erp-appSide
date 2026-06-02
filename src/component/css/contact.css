@@ -1,0 +1,25 @@
+.contact-img {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.contact-logo {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+}
+
+.contact-divider {
+  border: 0;
+  border-top: 1px solid var(--accent);
+  margin: 24px 0;
+}
+
+.contact-col {
+  text-align: left;
+  font-family: "Trebuchet MS";
+  color: white;
+}

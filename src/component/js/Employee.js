@@ -12,7 +12,8 @@ import {
 } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/employee.css";
-import logo from "../2.png";
+import logo from "../brand-logo.svg";
+import BRAND from "../../config/brand";
 import Swal from "sweetalert2";
 
 var socket;
@@ -23,7 +24,7 @@ export default class Employee extends React.Component {
       show: false,
       setShow: false,
       position: "",
-      endpoint: "http://192.168.1.40:8080",
+      endpoint: process.env.REACT_APP_SOCKET_ENDPOINT || "http://localhost:8080",
       emp_name: "",
       ref_lname: "",
       ref_fname: "",
@@ -327,8 +328,7 @@ export default class Employee extends React.Component {
 
         <div className="footer">
           <p>
-            All rights reserved 2019 | © Develop by: Zyrel Pasion • Mark Wiliz |
-            Lagotronics Philippines Inc.
+            © 2019 {BRAND.legalName} &middot; {BRAND.tagline}
           </p>
         </div>
         <Modal

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Switch, Link, Route, BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import AboutERP from "./component/js/AboutErp";
-import AboutLago from "./component/js/AboutLago";
+import AboutCompany from "./component/js/AboutCompany";
 import Contact from "./component/js/Contact";
 import Login from "./component/js/Login";
 import Employee from "./component/js/Employee";
@@ -13,13 +13,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import * as serviceWorker from "./serviceWorker";
 import HRLogin from "./component/js/LoginHR";
+import BRAND from "./config/brand";
 
 const routing = (
   <Router>
     <div>
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Link className="links" to="/">
-          Lagotronics
+        <Link className="brand" to="/">
+          {BRAND.name}
         </Link>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -30,8 +31,8 @@ const routing = (
             </Link>
           </Nav>
           <Nav>
-            <Link className="links" to="/aboutLago/">
-              About Lagotronics
+            <Link className="links" to="/about-company/">
+              About {BRAND.name}
             </Link>
           </Nav>
           <Nav>
@@ -52,7 +53,7 @@ const routing = (
         <Route exact path="/employee/" component={Employee} />
         <Route exact path="/6RXYPvzzDGiNphnUrytD/" component={HR} />
         <Route exact path="/aboutERP/" component={AboutERP} />
-        <Route exact path="/aboutLago/" component={AboutLago} />
+        <Route exact path="/about-company/" component={AboutCompany} />
         <Route exact path="/Contact/" component={Contact} />
         <Route exact path="/HRLogin/" component={HRLogin} />
       </Switch>

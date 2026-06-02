@@ -25,7 +25,7 @@ class HrTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      endpoint: "http://192.168.1.40:8080",
+      endpoint: process.env.REACT_APP_SOCKET_ENDPOINT || "http://localhost:8080",
       refs: [],
       search: "",
       setShow: false,

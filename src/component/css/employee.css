@@ -1,29 +1,38 @@
+/* Images never overflow their container by default */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 .message {
   text-align: left;
-  height: 450px;
-  color: #cccfd3;
-  padding-top: 70px;
-  left: 0;
-  font-family: "Trebuchet MS";
-  /* background-color: red; */
-}
-.erp-head {
-  color: #fff;
-  font-size: 60px;
+  color: var(--muted);
+  padding: 70px 0 30px;
   font-family: "Trebuchet MS";
 }
 
-img {
-  width: 300px;
+/* Header / content artwork inside text sections */
+.message img {
+  width: 100%;
+  max-width: 280px;
+  display: block;
+  margin: 0 auto;
 }
+
+.erp-head {
+  color: #fff;
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  line-height: 1.1;
+  font-family: "Trebuchet MS";
+}
+
 .container-class {
-  height: 400px;
+  max-height: 400px;
   overflow: auto;
   margin-bottom: 30px;
-  /* background-color: #171f32; */
 }
 .card {
-  background-color: #171f32;
+  background-color: var(--surface);
   color: #ffffff;
   border-radius: 12px;
   margin-bottom: 1.5%;
@@ -33,18 +42,15 @@ h3 {
   color: #fff;
 }
 .footer {
-  position: relative;
-  left: 0;
-  bottom: 0;
   width: 100%;
-  /* border-top: 1px solid white; */
   color: white;
   text-align: center;
   font-size: 12px;
+  padding: 18px 0;
   font-family: "Trebuchet MS";
 }
 .button1 {
-  background-color: #101727;
+  background-color: var(--bg);
   color: #ffffff;
   width: 100%;
   border-radius: 12px;
@@ -54,17 +60,16 @@ h3 {
 }
 
 .button1:hover {
-  background-color: #ff611d;
+  background-color: var(--accent);
   color: white;
 }
 
 .card:hover {
-  border-color: #ff611d;
+  border-color: var(--accent);
   cursor: pointer;
 }
 
 .body {
-  /* background-color: #101727; */
   padding: 30px;
   height: 300px;
   font-family: "Trebuchet MS";
@@ -73,22 +78,22 @@ h3 {
 .CloseBtn,
 .ReferBtn {
   width: 100%;
-  background-color: #23272a;
+  background-color: var(--surface-2);
   color: white;
-  border: 2px solid #2980b9;
+  border: 2px solid var(--accent-2);
   height: 50px;
   border-radius: 12px;
   font-family: "Trebuchet MS";
 }
 
 .ReferBtn:hover {
-  background-color: #75c46b;
+  background-color: var(--success);
   color: #ffffff;
 }
 .modal-body {
   text-align: center;
   color: #ffffff;
-  background-color: #23272a;
+  background-color: var(--surface-2);
   font-family: "Trebuchet MS";
 }
 .modal-body input {
@@ -101,7 +106,7 @@ h3 {
 
 .modal-header {
   text-align: center;
-  background-color: #23272a;
+  background-color: var(--surface-2);
   color: #ffffff;
   font-family: "Trebuchet MS";
 }

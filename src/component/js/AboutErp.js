@@ -26,17 +26,16 @@ export default class AboutERP extends React.Component {
                   </p>
                   <br />
                   <p>
-                    Generally, the value of referral incentives ranges from P500
-                    for entry-level positions and for the admin position will
-                    get P1000, For every successful candidate that you refer you
-                    will get 1000, (until he/she will stay for 3 months in the
-                    company)
+                    Referral incentives vary depending on the role. For every
+                    successful candidate you refer, you'll receive a cash reward
+                    once they complete three months with the company. Speak with
+                    HR for the current incentive amounts.
                   </p>
                 </Alert>
               </Col>
 
               <Col sm={4}>
-                <img src={logo} alt="Logo" />
+                <img src={logo} alt="Employee referral program" />
               </Col>
             </Row>
           </Container>

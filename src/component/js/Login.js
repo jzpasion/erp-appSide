@@ -1,18 +1,15 @@
 import React from "react";
 import "../css/login.css";
-import { Form, Container, Col, Row } from "react-bootstrap";
-import logo from "../1.png";
+import { Form } from "react-bootstrap";
+import logo from "../brand-logo.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import socketIOClient from "socket.io-client";
 import Swal from "sweetalert2";
+import BRAND from "../../config/brand";
 
-// var socket;
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // endpoint: "http://192.168.1.40:8080",
-    };
+    this.state = {};
   }
   NoBtn = () => {
     Swal.fire(
@@ -27,28 +24,22 @@ class Login extends React.Component {
   };
   render() {
     return (
-      <div className="App">
-        <Container>
-          <Row>
-            <Col>
-              <div className="login">
-                <img src={logo} alt="Logo" />
-                <Form>
-                  <h2 style={{ color: "#ff611d" }}>
-                    Are you a Lagotronics employee?
-                  </h2>
-                </Form>
+      <div className="auth-page">
+        <div className="login">
+          <img src={logo} alt={`${BRAND.name} logo`} />
+          <Form>
+            <h2>Are you a {BRAND.name} employee?</h2>
+          </Form>
 
-                <button className="signup" onClick={this.NoBtn}>
-                  No
-                </button>
-                <button className="signin" onClick={this.Login}>
-                  Yes
-                </button>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+          <div className="auth-actions">
+            <button className="signup" onClick={this.NoBtn}>
+              No
+            </button>
+            <button className="signin" onClick={this.Login}>
+              Yes
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

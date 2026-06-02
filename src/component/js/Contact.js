@@ -1,7 +1,9 @@
 import React from "react";
 import { Alert, Container, Row, Col } from "react-bootstrap";
-import lago from "../1.png";
+import logo from "../brand-logo.svg";
 import contact from "../contact.png";
+import "../css/contact.css";
+import BRAND from "../../config/brand";
 
 export default class Contact extends React.Component {
   render() {
@@ -16,67 +18,53 @@ export default class Contact extends React.Component {
                     <p className="erp-head">CONTACT US</p>
                   </Alert.Heading>
                   <p>
-                    LAGOTRONICS PHILIPPINES INC. <br /> Warehouse No. 5 Theme
-                    Builders Compound, Sitio Cubol Brgy. Sapalibutad Angeles
-                    City 2009, Pampanga Philippines
-                  </p>
-                  {/* <hr />
-                  <p className="mb-0">
-                    Contact Us: Reach us, let us know what you need
+                    {BRAND.legalName}
                     <br />
-                    +63.45.624.7098 <br />
-                    +63.05.675.2015
+                    {BRAND.contact.addressLines.map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        <br />
+                      </React.Fragment>
+                    ))}
+                    {BRAND.contact.email}
                   </p>
-                  <p>
-                    <br />
-                    Useful Links <br /> www.lagotronics.ph •
-                    www.lagotronicsprojects.com
-                  </p> */}
                 </Alert>
               </Col>
 
               <Col sm={4}>
-                <img src={contact} alt="Logo" />
+                <img className="contact-img" src={contact} alt="Contact" />
               </Col>
             </Row>
           </Container>
         </div>
-        <hr style={{ border: ".5px solid #ff611d" }} />
+        <hr className="contact-divider" />
         <Container>
           <Row>
             <Col sm>
-              <img src={lago} alt="Logo" />
+              <img className="contact-logo" src={logo} alt={`${BRAND.name} logo`} />
             </Col>
-            <Col
-              sm
-              style={{
-                textAlign: "left",
-                fontFamily: "Trebuchet MS",
-                color: "white"
-              }}
-            >
+            <Col sm className="contact-col">
               <p>Contact Us</p>
               <br />
               <p>
-                {" "}
-                +63.45.624.7098 <br />
-                +63.05.675.2015
+                {BRAND.contact.phones.map((phone, i) => (
+                  <React.Fragment key={i}>
+                    {phone}
+                    <br />
+                  </React.Fragment>
+                ))}
               </p>
             </Col>
-            <Col
-              sm
-              style={{
-                textAlign: "left",
-                fontFamily: "Trebuchet MS",
-                color: "white"
-              }}
-            >
+            <Col sm className="contact-col">
               <p>Useful Links</p>
               <br />
               <p>
-                {" "}
-                www.lagotronics.ph <br />
-                www.lagotronicsprojects.com
+                {BRAND.contact.links.map((link, i) => (
+                  <React.Fragment key={i}>
+                    {link}
+                    <br />
+                  </React.Fragment>
+                ))}
               </p>
             </Col>
           </Row>
